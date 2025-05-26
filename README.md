@@ -1,5 +1,4 @@
 E-Commerce Website
-
 Welcome to the E-Commerce Website project, a full-stack web application built with Spring Boot for the backend and React.js for the frontend. This project simulates a fully functional online store where users can browse products, add items to a cart, sign up or log in, place orders, and manage their accounts. It also includes an admin dashboard for managing products.
 This README provides an overview of the project, instructions for setting it up locally, and guidelines for contributing. Whether you're a developer looking to contribute or someone exploring the code, this guide will help you get started.
 Table of Contents
@@ -34,7 +33,8 @@ Backend:
 Spring Boot: Java framework for building RESTful APIs.
 Spring Data JPA: For database operations with Hibernate as the ORM.
 Spring Security: For authentication and authorization using JWT.
-MySQL: Relational database for storing products, users, and orders.
+Oracle SQL: Primary relational database for production data storage.
+H2 Database: In-memory database for development and testing.
 
 
 Frontend:
@@ -57,7 +57,8 @@ Before setting up the project, ensure you have the following installed:
 Java 17 or higher: For running the Spring Boot backend.
 Maven 3.6 or higher: For building the backend.
 Node.js 16 or higher: For running the React frontend.
-MySQL 8.0 or higher: For the database (or PostgreSQL as an alternative).
+Oracle Database 19c or higher: For the production database (optional for local development if using H2).
+H2 Database: Included as a dependency for development and testing.
 Git: For cloning the repository.
 IDE: IntelliJ IDEA, Eclipse, or VS Code for development.
 Postman (optional): For testing API endpoints.
@@ -74,20 +75,32 @@ Install Dependencies:Run the following command to download dependencies defined 
 mvn clean install
 
 
-Configure Application Properties:Update backend/src/main/resources/application.properties with your database credentials:
-spring.datasource.url=jdbc:mysql://localhost:3306/ecommerce
-spring.datasource.username=your-username
-spring.datasource.password=your-password
+Configure Application Properties:Update backend/src/main/resources/application.properties to configure either Oracle SQL or H2 based on your environment:
+
+For H2 (Development/Testing):spring.datasource.url=jdbc:h2:mem:ecommerce;DB_CLOSE_DELAY=-1
+spring.datasource.driverClassName=org.h2.Driver
+spring.datasource.username=sa
+spring.datasource.password=
+spring.jpa.database-platform=org.hibernate.dialect.H2Dialect
 spring.jpa.hibernate.ddl-auto=update
 spring.jpa.show-sql=true
 
 
-Set Up MySQL Database:
+For Oracle SQL (Production):spring.datasource.url=jdbc:oracle:thin:@localhost:1521:XE
+spring.datasource.username=your-username
+spring.datasource.password=your-password
+spring.datasource.driver-class-name=oracle.jdbc.OracleDriver
+spring.jpa.database-platform=org.hibernate.dialect.OracleDialect
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
 
-Install MySQL if not already installed.
-Create a database named ecommerce:CREATE DATABASE ecommerce;
 
 
+
+Set Up Databases:
+
+H2: No setup required; H2 runs in-memory and is created automatically when the application starts.
+Oracle SQL: Install Oracle Database locally or use a cloud instance. Create a schema (e.g., ecommerce) and ensure the credentials match your application.properties.
 
 
 
@@ -108,8 +121,8 @@ API_BASE_URL=http://localhost:8080/api
 
 Database Configuration
 
-The backend uses MySQL to store data. Spring Data JPA automatically creates tables based on entity classes (e.g., Product, User, Order) when spring.jpa.hibernate.ddl-auto=update is set.
-Ensure MySQL is running and the ecommerce database is created before starting the backend.
+H2 Database: Used for development and testing. Spring Data JPA automatically creates tables based on entity classes (e.g., Product, User, Order) when spring.jpa.hibernate.ddl-auto=update. Access the H2 console at http://localhost:8080/h2-console (enable in application.properties if needed).
+Oracle SQL: Used for production. Ensure the Oracle database is running and the schema is created before starting the backend. JPA will manage table creation based on entities.
 
 Running the Application
 
@@ -127,6 +140,7 @@ Access the Application:
 
 Open http://localhost:3000 to view the frontend.
 Use Postman or cURL to test backend APIs (e.g., GET http://localhost:8080/api/products).
+For H2, access the database console at http://localhost:8080/h2-console to inspect data.
 
 
 
