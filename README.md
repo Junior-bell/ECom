@@ -1,4 +1,5 @@
 E-Commerce Website
+
 Welcome to the E-Commerce Website project, a full-stack web application built with Spring Boot for the backend and React.js for the frontend. This project simulates a fully functional online store where users can browse products, add items to a cart, sign up or log in, place orders, and manage their accounts. It also includes an admin dashboard for managing products.
 This README provides an overview of the project, instructions for setting it up locally, and guidelines for contributing. Whether you're a developer looking to contribute or someone exploring the code, this guide will help you get started.
 Table of Contents
